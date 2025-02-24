@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     static_outfile.open(argv[argc - 2], std::ios::binary);
     inst_outfile.open(argv[argc - 1], std::ios::binary);
     std::vector<std::string> instructions;
-
+    std::vector<std::string> staticVars;
     /**
      * Phase 1:
      * Read all instructions, clean them of comments and whitespace DONE
@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
      * (measured in instructions) starting at 0
     */
 
+    // make labels work and we need to count line numbers
     //For each input file:
     for (int i = 1; i < argc - 2; i++) {
         std::ifstream infile(argv[i]); //  open the input file for reading
@@ -37,13 +38,29 @@ int main(int argc, char* argv[]) {
             std::cerr << "Error: could not open file: " << argv[i] << std::endl;
             exit(1);
         }
-
+        
+        std::bool data = false; 
         std::string str;
         while (getline(infile, str)){ //Read a line from the file
             str = clean(str); // remove comments, leading and trailing whitespace
             if (str == "") { //Ignore empty lines
                 continue;
             }
+
+            if(str == ".data"){
+                bool= true;
+                continue;
+            }
+
+            if (bool ==true){
+                staticVars.push_back(str);
+            }
+
+            if(str== ".txt"){
+                bool = false;
+                continue;
+            }
+
             instructions.push_back(str); // TODO This will need to change for labels
         }
         infile.close();
@@ -53,10 +70,27 @@ int main(int argc, char* argv[]) {
      * Process all static memory, output to static memory file
      * TODO: All of this
      */
+     i = 0;
+     for(std::string stat:StaticVars){
+        std::vector<std::string> terms = split(inst, WHITESPACE+",()");
+        std::string varName = terms[0];
+        pointers.push_back(varName);
+        //Artur will have this but add terms[0] to the list of pointers
+        std::string inst_type=terms[1];
+        i = 2
+        if (inst_type == ".int"){
+            for(int y = 2, y < size(terms), y++){
+            int result = encode_static(terms[i]);
+            write_binary(encode_static(terms[i]),inst_static_outfile);
+        }}
+        //write one for words
+    }
+}
 
+    
     /** Phase 3
      * Process all instructions, output to instruction memory file
-     * TODO: Almost all of this, it only works for adds
+     * TODO: Almost all of this, it only works for adds 
      */
     for(std::string inst : instructions) {
         std::vector<std::string> terms = split(inst, WHITESPACE+",()");
@@ -64,6 +98,52 @@ int main(int argc, char* argv[]) {
         if (inst_type == "add") {
             int result = encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32);
             write_binary(encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32),inst_outfile);
+        }
+
+        if (inst_type == "addi") {
+            int result = encode_Itype(8,registers[terms[2]], registers[terms[1]], registers[terms[3]]);
+            write_binary(encode_Itype(8,registers[terms[2]], registers[terms[1]], registers[terms[3]]),inst_outfile);
+        }
+
+       if (inst_type == "sub") {
+            int result = encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34);
+            write_binary(encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34),inst_outfile);
+        }
+       if (inst_type == "mult"){
+            int result = encode_Rtype(0,registers[terms[1]], registers[terms[2]],0, 0, 24);
+            write_binary(encode_Rtype(0,registers[terms[1]], registers[terms[2]], 0, 0, 24),inst_outfile);
+        }
+        if (inst_type == "div"){
+            int result = encode_Rtype(0,registers[terms[1]], registers[terms[2]],0, 0, 26);
+            write_binary(encode_Rtype(0,registers[terms[1]], registers[terms[2]], 0, 0, 26),inst_outfile);
+        }
+        if (inst_type =="mflo"){
+            int result = encode_Rtype(0,0,0,registers[terms[1]],18);
+            write_binary(encode_Rtype(0,0,0,registers[terms[1]],18),inst_outfile);
+        }
+
+        if (inst_type =="mfhi"){
+            int result = encode_Rtype(0,0,0,registers[terms[1]],16);
+            write_binary(encode_Rtype(0,0,0,registers[terms[1]],16),inst_outfile);
+        }
+
+        if (inst_type == "sll") {
+            int result = encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],0);
+            write_binary(encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],0),inst_outfile);
+        }
+
+        if (inst_type == "srl") {
+            int result = encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],2);
+            write_binary(encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],2),inst_outfile);
+        }
+    
+        if (inst_type == "lw") {
+            int result = encode_Itype(35,0, registers[terms[1]], registers[terms[2]]);
+            write_binary(encode_Itype(35,0, registers[terms[1]], registers[terms[2]]),inst_outfile);
+        }
+        if (inst_type == "sw") {
+            int result = encode_Itype(43,0, registers[terms[1]], registers[terms[2]]);
+            write_binary(encode_Itype(43,0, registers[terms[1]], registers[terms[2]]),inst_outfile);
         }
     }
 }
