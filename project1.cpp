@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
     inst_outfile.open(argv[argc - 1], std::ios::binary);
     std::vector<std::string> instructions;
     std::vector<std::string> staticVars;
+    std::map<std::string,std::int> staticMap;
     /**
      * Phase 1:
      * Read all instructions, clean them of comments and whitespace DONE
@@ -66,6 +67,39 @@ int main(int argc, char* argv[]) {
         infile.close();
     }
     
+
+     /** Phase 2
+        * Process all static memory, output to static memory file
+        * TODO: All of this
+        */
+        i = 0;
+        for(std::string stat:StaticVars){
+            std::vector<std::string> terms = split(stat, WHITESPACE+",()");
+            std::string varName = terms[0];
+            staticMap[varName] = i
+            //Artur will have this but add terms[0] to the list of pointers
+            std::string inst_type=terms[1];
+            if (inst_type == ".int"){
+                for(int y = 2, y < size(terms), y++){
+                    int result = encode_static(terms[y]);
+                    write_binary(encode_static(terms[y]),inst_static_outfile);
+                    i=i+32;
+            }}
+            if (inst_type == .word){
+                for(int y = 2, y < size(terms), y++){
+                    //loop through the already known function values or save until after?
+                    for(int z, y <size(instructionLabelsMap),y++){
+                        if(terms[y] == instructionLabelsMap) {/getting the name of this 
+                            int result = //get the line number of the label
+                            write_binary(encode_static(result),inst_static_outfile)
+                            i=i+32;
+                        }
+                    }
+                }
+            }
+        }
+
+
     /** Phase 3
      * Process all instructions, output to instruction memory file
      * TODO: Almost all of this, it only works for adds 
@@ -207,29 +241,18 @@ int main(int argc, char* argv[]) {
         }
 
         
-        /** Phase 2
-        * Process all static memory, output to static memory file
-        * TODO: All of this
-        */
-        i = 0;
-        for(std::string stat:StaticVars){
-            std::vector<std::string> terms = split(inst, WHITESPACE+",()");
-            std::string varName = terms[0];
-            pointers.push_back(varName);
-            //Artur will have this but add terms[0] to the list of pointers
-            std::string inst_type=terms[1];
-            i = 2
-            if (inst_type == ".int"){
-                for(int y = 2, y < size(terms), y++){
-                    int result = encode_static(terms[i]);
-                    write_binary(encode_static(terms[i]),inst_static_outfile);
-            }}
-            if (inst_type == .word){
-                for(int y = 2, y < size(terms), y++){
-                    //loop through the already known function values or save until after?
-                }
-            }
+        if (inst_type == "syscall")
+        {
+            int result = encode_Rtype(0, 0, 0, 26, 0, 12);
+            write_binary(encode_Rtype(0, 0, 0, 26, 0, 12), inst_outfile);
         }
+
+         if (inst_type == "la")
+        {
+            value = staticMap[terms[2]];
+            write_binary(encode_Itype(8,0, registers[terms[1]], value),inst_outfile);
+        }
+
     }
     }
 #endif
