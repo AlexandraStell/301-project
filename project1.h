@@ -60,11 +60,11 @@ void write_binary(int value,std::ofstream &outfile)
  * Helper methods for instruction encoding
  */
 
+
 // Utility function for encoding an arithmetic "R" type function
 int encode_Rtype(int opcode, int rs, int rt, int rd, int shftamt, int funccode) {
     return (opcode << 26) + (rs << 21) + (rt << 16) + (rd << 11) + (shftamt << 6) + funccode;
 }
-
 // Utility function for encoding an arithmetic "I" type function
 int encode_Itype(int opcode, int rs, int rt, int immi){
     return (opcode << 26) + (rs << 21) + (rt << 16) + (immi & 0xFFFF);
@@ -73,11 +73,19 @@ int encode_Itype(int opcode, int rs, int rt, int immi){
 int encode_Jtype(int opcode, int addi){
     return (opcode << 26) + addi; 
 }
-
-int encode_static(int stat) {
-    return stat;
-}
 // Hint: What other instruction types need to be encoded?
+
+//Helper function to return the int value of the line number of a label if it is found in memory. 
+//returns -1 if not found. 
+int findLabelLine(std::string &label, std::unordered_map<std::string, int> &map)
+{
+    auto found = map.find(label);
+    if (found != map.end()) {
+        return found->second;
+    } else {
+        return -1;
+    }
+}
 
 
 /**
