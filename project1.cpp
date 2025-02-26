@@ -20,8 +20,7 @@ int main(int argc, char* argv[]) {
     static_outfile.open(argv[argc - 2], std::ios::binary);
     inst_outfile.open(argv[argc - 1], std::ios::binary);
     std::vector<std::string> instructions;
-    std::vector<std::string> staticVars;
-    std::map<std::string,std::int> staticMap;
+
     /**
      * Phase 1:
      * Read all instructions, clean them of comments and whitespace DONE
@@ -30,8 +29,14 @@ int main(int argc, char* argv[]) {
      * TODO: Determine the line numbers of all instruction line labels
      * (measured in instructions) starting at 0
     */
-
-    // make labels work and we need to count line numbers
+//    std::vector<std::string> staticVars;
+//    std::unordered_map<std::string, int> staticMap;
+    std::unordered_map<std::string, int> smLabels;
+    std::unordered_map<std::string, int> instructionLabelsMap;
+    std::vector<std::string> staticValue; // Vector to store all values from .word directives
+    int smAddress = 0;                    // 0 is the first address for static memory
+    int instructionLineCount = 0;         // counter for instruction lines
+    bool staticMemoryFound = false;       // Will be true when we are in static memory
     //For each input file:
     for (int i = 1; i < argc - 2; i++) {
         std::ifstream infile(argv[i]); //  open the input file for reading
@@ -39,8 +44,8 @@ int main(int argc, char* argv[]) {
             std::cerr << "Error: could not open file: " << argv[i] << std::endl;
             exit(1);
         }
-        
-        std::bool data = false; 
+
+        // bool data = false; 
         std::string str;
         while (getline(infile, str)){ //Read a line from the file
             str = clean(str); // remove comments, leading and trailing whitespace
@@ -48,114 +53,179 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
-            if(str == ".data"){
-                bool= true;
-                continue;
-            }
+            // if(str == ".data"){
+            //     data = true;
+            //     continue;
+            // }
 
-            if (bool ==true){
-                staticVars.push_back(str);
-            }
+            // if (data ==true){
+            //     staticVars.push_back(str);
+            // }
 
-            if(str== ".txt"){
-                bool = false;
-                continue;
-            }
+            // if(str== ".txt"){
+            //     data = false;
+            //     continue;
+            // }
 
+            // how to determine whether the current line is part of the instruction section or the static memory section?
+            //Labels
             instructions.push_back(str); // TODO This will need to change for labels
-        }
-        infile.close();
-    }
-    
+            if (str[0] == '.')
+            {
+                continue; // Skip any line starts with "."
+            }
 
-     /** Phase 2
-        * Process all static memory, output to static memory file
-        * TODO: All of this
-        */
-        i = 0;
-        for(std::string stat:StaticVars){
-            std::vector<std::string> terms = split(stat, WHITESPACE+",()");
-            std::string varName = terms[0];
-            staticMap[varName] = i
-            //Artur will have this but add terms[0] to the list of pointers
-            std::string inst_type=terms[1];
-            if (inst_type == ".int"){
-                for(int y = 2, y < size(terms), y++){
-                    int result = encode_static(terms[y]);
-                    write_binary(encode_static(terms[y]),inst_static_outfile);
-                    i=i+32;
-            }}
-            if (inst_type == .word){
-                for(int y = 2, y < size(terms), y++){
-                    //loop through the already known function values or save until after?
-                    for(int z, y <size(instructionLabelsMap),y++){
-                        if(terms[y] == instructionLabelsMap) {/getting the name of this 
-                            int result = //get the line number of the label
-                            write_binary(encode_static(result),inst_static_outfile)
-                            i=i+32;
-                        }
+            size_t wordPos = str.find(".word");
+            if (wordPos != std::string::npos)
+            {
+                staticMemoryFound = true; // Switch to processing static memory when ".word" has been found
+            }
+
+            if (str[0] != '.' && wordPos == std::string::npos)
+            {
+                staticMemoryFound = false; // Switch to processing instruction
+            }
+
+            if (!staticMemoryFound)
+            {
+                // Process instruction labels and instructions
+                size_t colonPos = str.find(':');
+                if (colonPos != std::string::npos)
+                {
+                    std::string label = str.substr(0, colonPos);
+                    instructionLabelsMap[label] = instructionLineCount;
+                    instructionLineCount--;
+                }
+                instructionLineCount++;
+                continue;
+            }
+            else
+            {
+                // Processing static memory labels
+                size_t colonPos = str.find(':');
+                if (colonPos != std::string::npos)
+                {
+                    std::string label = str.substr(0, colonPos);
+                    smLabels[label] = smAddress; // give static labels their respective offset
+                    std::string valuesStr = str.substr(wordPos + 6);       // +6 to skip ":.word"
+                    std::vector<std::string> values = split(valuesStr, " ");
+                    smAddress += (values.size() * 4); 
+
+                    // Check each value in values and append each value to the staticValue vector
+                    for (const std::string &value : values)
+                    {
+                        staticValue.push_back(value);
                     }
+                    continue;
                 }
             }
+            infile.close();
         }
+        smLabels["_END_OF_STATIC_MEMORY_"] = smAddress;
+        }
+        //infile.close();
+    
 
+    /** Phase 2
+     * Process all static memory, output to static memory file
+     * TODO: All of this
+     */
+    // int i = 0;
+    // for(std::string stat:staticVars){
+    //     std::vector<std::string> terms = split(stat, WHITESPACE+",()");
+    //     std::string varName = terms[0];
+    //     staticMap[varName] = i
+    //     //Artur will have this but add terms[0] to the list of pointers
+    //     std::string inst_type=terms[1];
+    //     if (inst_type == ".int"){
+    //         for(int y = 2, int y < size(terms), y++){
+    //             int result = encode_static(terms[y]);
+    //             write_binary(encode_static(terms[y]),inst_static_outfile);
+    //             i=i+32;
+    //     }}
 
     /** Phase 3
      * Process all instructions, output to instruction memory file
-     * TODO: Almost all of this, it only works for adds 
+     * TODO: Almost all of this, it only works for adds
      */
     for(std::string inst : instructions) {
         std::vector<std::string> terms = split(inst, WHITESPACE+",()");
         std::string inst_type = terms[0];
+        int count = 0;
         if (inst_type == "add") {
             int result = encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32);
             write_binary(encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32),inst_outfile);
         }
-
-        if (inst_type == "addi") {
-            int result = encode_Itype(8,registers[terms[2]], registers[terms[1]], registers[terms[3]]);
-            write_binary(encode_Itype(8,registers[terms[2]], registers[terms[1]], registers[terms[3]]),inst_outfile);
+        
+        // Code to write the addi instructions to memory in binary
+        if (inst_type == "addi")
+        {
+            std::cout << smLabels[terms[3]];
+            int result = encode_Itype(8, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]));
+            write_binary(encode_Itype(8, registers[terms[2]], registers[terms[1]], std::stoi(terms[3])), inst_outfile);
         }
 
-       if (inst_type == "sub") {
-            int result = encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34);
-            write_binary(encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34),inst_outfile);
-        }
-       if (inst_type == "mult"){
-            int result = encode_Rtype(0,registers[terms[1]], registers[terms[2]],0, 0, 24);
-            write_binary(encode_Rtype(0,registers[terms[1]], registers[terms[2]], 0, 0, 24),inst_outfile);
-        }
-        if (inst_type == "div"){
-            int result = encode_Rtype(0,registers[terms[1]], registers[terms[2]],0, 0, 26);
-            write_binary(encode_Rtype(0,registers[terms[1]], registers[terms[2]], 0, 0, 26),inst_outfile);
-        }
-        if (inst_type =="mflo"){
-            int result = encode_Rtype(0,0,0,registers[terms[1]],18);
-            write_binary(encode_Rtype(0,0,0,registers[terms[1]],18),inst_outfile);
+        // Code to write the sub instructions to memory in binary
+        if (inst_type == "sub")
+        {
+            int result = encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34);
+            write_binary(encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34), inst_outfile);
         }
 
-        if (inst_type =="mfhi"){
-            int result = encode_Rtype(0,0,0,registers[terms[1]],16);
-            write_binary(encode_Rtype(0,0,0,registers[terms[1]],16),inst_outfile);
+        // Code to write the mult instructions to memory in binary
+        if (inst_type == "mult")
+        {
+            int result = encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 24);
+            write_binary(encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 24), inst_outfile);
         }
 
-        if (inst_type == "sll") {
-            int result = encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],0);
-            write_binary(encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],0),inst_outfile);
+        // Code to write the div instructions to memory in binary
+        if (inst_type == "div")
+        {
+            int result = encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 26);
+            write_binary(encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 26), inst_outfile);
         }
 
-        if (inst_type == "srl") {
-            int result = encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],2);
-            write_binary(encode_Rtype(0,0,registers[terms[2]], registers[terms[1]], registers[terms[3]],2),inst_outfile);
+        // Code to write the mflo instructions to memory in binary
+        if (inst_type == "mflo")
+        {
+            int result = encode_Rtype(0, 0, 0, registers[terms[1]], 0, 18);
+            write_binary(encode_Rtype(0, 0, 0, registers[terms[1]], 0, 18), inst_outfile);
         }
-    
-        if (inst_type == "lw") {
-            int result = encode_Itype(35,0, registers[terms[1]], registers[terms[2]]);
-            write_binary(encode_Itype(35,0, registers[terms[1]], registers[terms[2]]),inst_outfile);
+
+        // Code to write the mfhi instructions to memory in binary
+        if (inst_type == "mfhi")
+        {
+            int result = encode_Rtype(0, 0, 0, registers[terms[1]], 0, 16);
+            write_binary(encode_Rtype(0, 0, 0, registers[terms[1]], 0, 16), inst_outfile);
         }
-        if (inst_type == "sw") {
-            int result = encode_Itype(43,0, registers[terms[1]], registers[terms[2]]);
-            write_binary(encode_Itype(43,0, registers[terms[1]], registers[terms[2]]),inst_outfile);
+
+        // Code to write the sll instructions to memory in binary
+        if (inst_type == "sll")
+        {
+            int result = encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 0);
+            write_binary(encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 0), inst_outfile);
+        }
+
+        // Code to write the srl instructions to memory in binary
+        if (inst_type == "srl")
+        {
+            int result = encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 2);
+            write_binary(encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 2), inst_outfile);
+        }
+
+        // Code to write the lw instructions to memory in binary
+        if (inst_type == "lw")
+        {
+            int result = encode_Itype(35, registers[terms[3]], registers[terms[1]], std::stoi(terms[2]));
+            write_binary(encode_Itype(35, registers[terms[3]], registers[terms[1]], std::stoi(terms[2])), inst_outfile);
+        }
+
+        // Code to write the sw instructions to memory in binary
+        if (inst_type == "sw")
+        {
+            int result = encode_Itype(43, registers[terms[3]], registers[terms[1]], std::stoi(terms[2]));
+            write_binary(encode_Itype(43, registers[terms[3]], registers[terms[1]], std::stoi(terms[2])), inst_outfile);
         }
 
         // Code to write the slt instructions to memory in binary
@@ -239,20 +309,7 @@ int main(int argc, char* argv[]) {
             int result = encode_Rtype(0, 0, 0, 26, 0, 12);
             write_binary(encode_Rtype(0, 0, 0, 26, 0, 12), inst_outfile);
         }
-
-        
-        if (inst_type == "syscall")
-        {
-            int result = encode_Rtype(0, 0, 0, 26, 0, 12);
-            write_binary(encode_Rtype(0, 0, 0, 26, 0, 12), inst_outfile);
-        }
-
-         if (inst_type == "la")
-        {
-            value = staticMap[terms[2]];
-            write_binary(encode_Itype(8,0, registers[terms[1]], value),inst_outfile);
-        }
-
     }
-    }
+
+}
 #endif
