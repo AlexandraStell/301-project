@@ -130,6 +130,26 @@ int main(int argc, char* argv[]) {
      * Process all static memory, output to static memory file
      * TODO: All of this
      */
+
+    // change to get a better static memory
+    for (std::string values : staticValue)
+    { // going through each value after .word
+        std::vector<std::string> terms1 = split(values, WHITESPACE + ",()");
+        auto foundValue = instructionLabelsMap.find(values); // could check if it is a label
+
+        if (foundValue != instructionLabelsMap.end()) // if the label is found on the instruction_Labels map
+        {                                       
+            int write = foundValue->second * 4; // The next value occupies 4 bytes of memory
+            write_binary(write, static_outfile);
+        }
+
+        else
+        {                                  // Assume that it's an int
+            int write = std::stoi(values); // convert the value as an integer
+            write_binary(write, static_outfile);
+        }
+    }
+
     // int i = 0;
     // for(std::string stat:staticVars){
     //     std::vector<std::string> terms = split(stat, WHITESPACE+",()");
@@ -148,17 +168,18 @@ int main(int argc, char* argv[]) {
      * Process all instructions, output to instruction memory file
      * TODO: Almost all of this, it only works for adds
      */
+    int count = 0;
     for(std::string inst : instructions) {
         std::vector<std::string> terms = split(inst, WHITESPACE+",()");
         std::string inst_type = terms[0];
-        int count = 0;
+
         if (inst_type == "add") {
             int result = encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32);
             write_binary(encode_Rtype(0,registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 32),inst_outfile);
         }
         
         // Code to write the addi instructions to memory in binary
-        if (inst_type == "addi")
+        else if (inst_type == "addi")
         {
             std::cout << smLabels[terms[3]];
             int result = encode_Itype(8, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]));
@@ -166,77 +187,77 @@ int main(int argc, char* argv[]) {
         }
 
         // Code to write the sub instructions to memory in binary
-        if (inst_type == "sub")
+        else if (inst_type == "sub")
         {
             int result = encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34);
             write_binary(encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 34), inst_outfile);
         }
 
         // Code to write the mult instructions to memory in binary
-        if (inst_type == "mult")
+        else if (inst_type == "mult")
         {
             int result = encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 24);
             write_binary(encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 24), inst_outfile);
         }
 
         // Code to write the div instructions to memory in binary
-        if (inst_type == "div")
+        else if (inst_type == "div")
         {
             int result = encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 26);
             write_binary(encode_Rtype(0, registers[terms[1]], registers[terms[2]], 0, 0, 26), inst_outfile);
         }
 
         // Code to write the mflo instructions to memory in binary
-        if (inst_type == "mflo")
+        else if (inst_type == "mflo")
         {
             int result = encode_Rtype(0, 0, 0, registers[terms[1]], 0, 18);
             write_binary(encode_Rtype(0, 0, 0, registers[terms[1]], 0, 18), inst_outfile);
         }
 
         // Code to write the mfhi instructions to memory in binary
-        if (inst_type == "mfhi")
+        else if (inst_type == "mfhi")
         {
             int result = encode_Rtype(0, 0, 0, registers[terms[1]], 0, 16);
             write_binary(encode_Rtype(0, 0, 0, registers[terms[1]], 0, 16), inst_outfile);
         }
 
         // Code to write the sll instructions to memory in binary
-        if (inst_type == "sll")
+        else if (inst_type == "sll")
         {
             int result = encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 0);
             write_binary(encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 0), inst_outfile);
         }
 
         // Code to write the srl instructions to memory in binary
-        if (inst_type == "srl")
+        else if (inst_type == "srl")
         {
             int result = encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 2);
             write_binary(encode_Rtype(0, 0, registers[terms[2]], registers[terms[1]], std::stoi(terms[3]), 2), inst_outfile);
         }
 
         // Code to write the lw instructions to memory in binary
-        if (inst_type == "lw")
+        else if (inst_type == "lw")
         {
             int result = encode_Itype(35, registers[terms[3]], registers[terms[1]], std::stoi(terms[2]));
             write_binary(encode_Itype(35, registers[terms[3]], registers[terms[1]], std::stoi(terms[2])), inst_outfile);
         }
 
         // Code to write the sw instructions to memory in binary
-        if (inst_type == "sw")
+        else if (inst_type == "sw")
         {
             int result = encode_Itype(43, registers[terms[3]], registers[terms[1]], std::stoi(terms[2]));
             write_binary(encode_Itype(43, registers[terms[3]], registers[terms[1]], std::stoi(terms[2])), inst_outfile);
         }
 
         // Code to write the slt instructions to memory in binary
-        if (inst_type == "slt")
+        else if (inst_type == "slt")
         {
             int result = encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 42);
             write_binary(encode_Rtype(0, registers[terms[2]], registers[terms[3]], registers[terms[1]], 0, 42), inst_outfile);
         }
 
         // Code to write the bne instructions to memory in binary
-        if (inst_type == "bne")
+        else if (inst_type == "bne")
         {
             // Term is adjusted in accordance with the formula on the guidelines sheet.
             std::string constant = (terms[3]);
@@ -248,7 +269,7 @@ int main(int argc, char* argv[]) {
         }
 
         // Code to write the beq instructions to memory in binary
-        if (inst_type == "beq")
+        else if (inst_type == "beq")
         {
             // Term is adjusted in accordance with the formula on the guidelines sheet.
             std::string constant = (terms[3]);
@@ -262,7 +283,7 @@ int main(int argc, char* argv[]) {
         }
 
         // Code to write the j instructions to memory in binary
-        if (inst_type == "j")
+        else if (inst_type == "j")
         {
             std::string constant = (terms[1]);
             int term = findLabelLine(constant, instructionLabelsMap);
@@ -271,14 +292,14 @@ int main(int argc, char* argv[]) {
         }
 
         // Code to write the jr instructions to memory in binary
-        if (inst_type == "jr")
+        else if (inst_type == "jr")
         {
             int result = encode_Rtype(0, registers[terms[1]], 0, 0, 0, 8);
             write_binary(encode_Rtype(0, registers[terms[1]], 0, 0, 0, 8), inst_outfile);
         }
 
         // Code to write the jal instructions to memory in binary
-        if (inst_type == "jal")
+        else if (inst_type == "jal")
         {
             std::string constant = (terms[1]);
             int term = findLabelLine(constant, instructionLabelsMap);
@@ -288,7 +309,7 @@ int main(int argc, char* argv[]) {
         }
 
         // code to write the jalr instructions to memory in binary
-        if (inst_type == "jalr")
+        else if (inst_type == "jalr")
         {
             // check if only two terms (jalr $ra)
             if (terms.size() == 2)
@@ -304,11 +325,39 @@ int main(int argc, char* argv[]) {
         }
 
         // Code to write the syscall instructions to memory in binary
-        if (inst_type == "syscall")
+        else if (inst_type == "syscall")
         {
             int result = encode_Rtype(0, 0, 0, 26, 0, 12);
             write_binary(encode_Rtype(0, 0, 0, 26, 0, 12), inst_outfile);
         }
+
+        // Code to write the la instructions to memory in binary
+        else if (inst_type == "la") {
+            //for this project translate la $rt, label into  addi $rt, $zero, constant
+            //constant is the address of the label in static memory (found in smLabels)
+            
+            // Assuming the instruction tokens (aka terms) are:
+            // terms[0] = "la"
+            // terms[1] = destination register (e.g., "$t0")
+            // terms[2] = label (e.g., "myData")
+            
+            std::string rt = terms[1];      // destination register
+            std::string label = terms[2];   // static memory label to load the address from
+            
+            // Look up the label's address from the static memory label map (smLabels)
+            int constant = smLabels[label];
+            
+            // For addi, the opcode is 8 (decimal) and the source register is $zero
+            int result = encode_Itype(8, registers["$zero"], registers[rt], constant);
+            
+            // Write the encoded addi instruction to the instruction output file
+            write_binary(result, inst_outfile);
+        }
+        else{
+            continue;
+        }
+        
+        count++;
     }
 
 }
