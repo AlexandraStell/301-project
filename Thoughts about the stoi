@@ -1,0 +1,1 @@
+I believe in the static it took in the integer values as characters because they were in the type .word and stoi did not know what to do because they were the wrong types
