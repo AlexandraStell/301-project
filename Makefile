@@ -1,20 +1,21 @@
 #General Purpose Makefile (Courtesy of Prateek Bhakta)
 
-EXECS = assemble.exe
+EXECS = assemble
 OBJS = project1.o
 
-# Compiler and flags
+# For *nix and Mac
 CC = g++
-CCFLAGS = -std=c++17 
+CCFLAGS	 = -std=c++17 
 
-# Build target
+# Will need to do something different on Windows
+
 all: $(EXECS)
 
-assemble.exe: $(OBJS)
+assemble: $(OBJS)
 	$(CC) $(CCFLAGS) -I . $^ -o $@
 
 %.o: %.cpp *.h
-	$(CC) $(CCFLAGS) -I . -c $< -o $@
+	$(CC) $(CCFLAGS) -I . -c $<
 
 clean:
-	del /Q $(OBJS) $(EXECS) 2>nul
+	/bin/rm -f a.out $(OBJS) $(EXECS)
