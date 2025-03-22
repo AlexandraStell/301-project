@@ -429,11 +429,11 @@
       <a name="label" val="reg31"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="8" loc="(1124,62)" name="Text">
+    <comp lib="8" loc="(1120,60)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="rs"/>
     </comp>
-    <comp lib="8" loc="(629,248)" name="Text">
+    <comp lib="8" loc="(625,245)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="reg1"/>
     </comp>
@@ -2069,15 +2069,15 @@
       <a name="label" val="LO"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="8" loc="(1020,261)" name="Text">
+    <comp lib="8" loc="(1020,260)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="pretty sure this works cause div and mult are made to not change the Res in the main?"/>
     </comp>
-    <comp lib="8" loc="(470,48)" name="Text">
+    <comp lib="8" loc="(470,45)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="I HAVE UPDATED THIS A LOT.... REVERT TO OTHER ONE FOR THE SETUP JUST FROM CLASS"/>
     </comp>
-    <comp lib="8" loc="(601,17)" name="Text">
+    <comp lib="8" loc="(600,15)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="thinking about what we have to do.... if the ALU code is anything but mult or divide we take the outputs and output them... if it is div or mult we dont output anything but instead store values into HI or LO"/>
     </comp>
@@ -3941,7 +3941,7 @@
       <a name="appearance" val="logisim_evolution"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="8" loc="(1026,2221)" name="Text">
+    <comp lib="8" loc="(1025,2220)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="WANT SIGNED IDK WHICH ONE THIS IS"/>
     </comp>
@@ -3973,19 +3973,19 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="SHOULD AT LEAST WORK FOR ADD, ADDI AND MULT"/>
     </comp>
-    <comp lib="8" loc="(1765,1394)" name="Text">
+    <comp lib="8" loc="(1765,1390)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="IS J"/>
     </comp>
-    <comp lib="8" loc="(1812,1381)" name="Text">
+    <comp lib="8" loc="(1810,1380)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="is beq"/>
     </comp>
-    <comp lib="8" loc="(1848,1704)" name="Text">
+    <comp lib="8" loc="(1845,1700)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="SET THIS TO 0 IF YOU DO NOT WANT TO OVERWRITE REGISTERS ... EX MULT -- HI AND LOW LIVE  IN THE ALU"/>
     </comp>
-    <comp lib="8" loc="(1865,1383)" name="Text">
+    <comp lib="8" loc="(1865,1380)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="is bne"/>
     </comp>
@@ -4017,7 +4017,7 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="read ram"/>
     </comp>
-    <comp lib="8" loc="(2267,1837)" name="Text">
+    <comp lib="8" loc="(2265,1835)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="eq"/>
     </comp>
@@ -4041,7 +4041,7 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="add"/>
     </comp>
-    <comp lib="8" loc="(2516,1821)" name="Text">
+    <comp lib="8" loc="(2515,1820)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="new output shows what this is a beq/bne and the imputs are the same"/>
     </comp>
@@ -4073,35 +4073,35 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="ram input register part"/>
     </comp>
-    <comp lib="8" loc="(3018,2327)" name="Text">
+    <comp lib="8" loc="(3015,2325)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="FOR JAL"/>
     </comp>
-    <comp lib="8" loc="(3228,1270)" name="Text">
+    <comp lib="8" loc="(3225,1270)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="ADDING JAL"/>
     </comp>
-    <comp lib="8" loc="(3234,1538)" name="Text">
+    <comp lib="8" loc="(3230,1535)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="should branch"/>
     </comp>
-    <comp lib="8" loc="(3354,2135)" name="Text">
+    <comp lib="8" loc="(3350,2135)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="immediate"/>
     </comp>
-    <comp lib="8" loc="(3358,1318)" name="Text">
+    <comp lib="8" loc="(3355,1315)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="need it to work for beq"/>
     </comp>
-    <comp lib="8" loc="(3362,2192)" name="Text">
+    <comp lib="8" loc="(3360,2190)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="they had a extender cause immedicate might end up being less than 32 bits"/>
     </comp>
-    <comp lib="8" loc="(3736,2251)" name="Text">
+    <comp lib="8" loc="(3735,2250)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="WANT SIGNED IDK WHICH ONE THIS IS"/>
     </comp>
-    <comp lib="8" loc="(4090,2083)" name="Text">
+    <comp lib="8" loc="(4090,2080)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="FOR JAL"/>
     </comp>
@@ -4109,23 +4109,23 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="SHOULD AT LEAST WORK FOR ADD, ADDI AND MULT"/>
     </comp>
-    <comp lib="8" loc="(4470,1508)" name="Text">
+    <comp lib="8" loc="(4470,1505)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="IS JAL"/>
     </comp>
-    <comp lib="8" loc="(4475,1424)" name="Text">
+    <comp lib="8" loc="(4475,1420)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="IS J"/>
     </comp>
-    <comp lib="8" loc="(4522,1411)" name="Text">
+    <comp lib="8" loc="(4520,1410)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="is beq"/>
     </comp>
-    <comp lib="8" loc="(4558,1734)" name="Text">
+    <comp lib="8" loc="(4555,1730)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="SET THIS TO 0 IF YOU DO NOT WANT TO OVERWRITE REGISTERS ... EX MULT -- HI AND LOW LIVE  IN THE ALU"/>
     </comp>
-    <comp lib="8" loc="(4575,1413)" name="Text">
+    <comp lib="8" loc="(4575,1410)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="is bne"/>
     </comp>
@@ -4141,19 +4141,19 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="BASICALLLY MAKE THIS = TO ZERO TO TAKE THE R TYPE "/>
     </comp>
-    <comp lib="8" loc="(4977,1867)" name="Text">
+    <comp lib="8" loc="(4975,1865)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="eq"/>
     </comp>
-    <comp lib="8" loc="(5226,1851)" name="Text">
-      <a name="font" val="SansSerif plain 12"/>
-      <a name="text" val="new output shows what this is a beq/bne and the imputs are the same"/>
-    </comp>
-    <comp lib="8" loc="(524,1508)" name="Text">
+    <comp lib="8" loc="(520,1505)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="should branch"/>
     </comp>
-    <comp lib="8" loc="(529,1238)" name="Text">
+    <comp lib="8" loc="(5225,1850)" name="Text">
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="text" val="new output shows what this is a beq/bne and the imputs are the same"/>
+    </comp>
+    <comp lib="8" loc="(525,1235)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="beq and bne AND SOME J"/>
     </comp>
@@ -4161,23 +4161,23 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="lw $t0, 4($t1)"/>
     </comp>
-    <comp lib="8" loc="(644,2105)" name="Text">
+    <comp lib="8" loc="(640,2105)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="immediate"/>
     </comp>
-    <comp lib="8" loc="(647,1211)" name="Text">
-      <a name="font" val="SansSerif plain 12"/>
-      <a name="text" val="think it works but lowkey got lost so we will need to check"/>
-    </comp>
-    <comp lib="8" loc="(648,1163)" name="Text">
+    <comp lib="8" loc="(645,1160)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="HALFWAY THROUGH JUMP GOT CONFUSED -- SEE PIC ON THE PHONE - MIGHT WORK MIGHT NOT"/>
     </comp>
-    <comp lib="8" loc="(648,1288)" name="Text">
+    <comp lib="8" loc="(645,1210)" name="Text">
+      <a name="font" val="SansSerif plain 12"/>
+      <a name="text" val="think it works but lowkey got lost so we will need to check"/>
+    </comp>
+    <comp lib="8" loc="(645,1285)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="need it to work for beq"/>
     </comp>
-    <comp lib="8" loc="(652,2162)" name="Text">
+    <comp lib="8" loc="(650,2160)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="they had a extender cause immedicate might end up being less than 32 bits"/>
     </comp>
@@ -4185,7 +4185,7 @@
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="new control outputs"/>
     </comp>
-    <comp lib="8" loc="(698,1191)" name="Text">
+    <comp lib="8" loc="(695,1190)" name="Text">
       <a name="font" val="SansSerif plain 12"/>
       <a name="text" val="NEED TO FIGURE OUT IF WE WANT SIGNED OR UNSIGNED EXTENDERS.... FOR TRIMMING BITS IT DOESNT MATTER"/>
     </comp>
